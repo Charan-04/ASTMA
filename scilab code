@@ -1,0 +1,493 @@
+To understand how frequency distribution can be used to represent
+an image.
+
+clc ;
+clear;
+close;
+img= imread ('rose.jpeg');
+subplot(2,2,1);
+title('Original image');
+imshow(img);
+img=rgb2gray(img);
+[count,cells ]= imhist (img);
+subplot(2,2,2);
+plot2d3 ('gnn' , cells , count )
+title('Histogram plot for original image');
+Iheq = imhistequal(img);
+[count,cells ]= imhist (Iheq);
+subplot(2,2,3);
+title('Histogram Equalized image');
+imshow(Iheq);
+subplot(2,2,4);
+plot2d3 ('gnn' , cells , count )
+title('Histogram plot for histogram equalized image');
+
+
+exp-3 Affine Transformation
+
+clc ;
+clear; close;
+I =imread('Baby.jpg');
+[m,n] = size (I);
+for i = 1:m
+for j =1: n
+// S c a l i n g
+J(2*i,2*j) = I(i,j);
+// Ro t a t i on
+p = i*cos(%pi/2)+j*sin(%pi/2);
+q = -i*sin(%pi/2)+j*cos(%pi/2);
+p = ceil(abs(p)+0.0001);
+q = ceil(abs(q)+0.0001);
+K(p,q)= I(i,j);
+// s h e a r t r a n s f o rma t i o n
+u = i +0.2*j;
+v = j;
+L(u,v)= I(i,j);
+end
+end
+subplot(2,2,1);
+title('Original image');
+imshow(I);
+subplot(2,2,2);
+title('Scaled image');
+imshow(J);
+subplot(2,2,3);
+
+title('Rotated image');
+imshow(K);
+subplot(2,2,4);
+title('Shear transformed (X-direction) image');
+imshow(L);
+
+exp-4 2D FOURIER TRANSFORMATION IN AN image
+
+clc;
+clear all;
+close all;
+I = imread('Fruit.jpg');
+// [ 1 ] . 2D−DFT and i t s I n v e r s e 2D−DFT
+I = double (I);
+J = fftshift(I);
+K = real(ifftshift(J));
+subplot(2,2,1);
+imshow(I);
+title('Original Lenna Image');
+subplot(2,2,2);
+imshow(abs(J));
+title('2D DFT (spectrum) of Lenna Image');
+subplot(2,2,3);
+imshow(K);
+title('2d IDFT of Lenna Image');
+L = fftshift (J);
+M = fftshift (L);
+subplot(2,2,4);
+imshow(abs(L));
+title('FFT shifted spectrum of image');
+figure,
+imshow(abs(M));
+title('two times FFT shifted');
+
+Exp 5: Perform perform the Linear filtering using convolution in an image
+S = imread(‘balloons_noise.png’);
+imshow(S);
+h = 1/25.*ones(5,5);
+S2 = imfilter(S,h);
+imshow(S2);
+S = imread(‘text.png’);
+imshow(S);
+S2 = imcomplement(S);
+imshow(S2);
+h = imread(‘a.png’);
+h2 = imcomplement(h);
+imshow(h2);
+S3 = im2double(S2);
+h3 = im2double(h2);
+S4 = imfilter(S3,h3);
+S5 = imnorm(S4);
+imshow(S5);
+a_loc = S5 &gt; 0.9;
+[rows, cols] = find(a_loc);
+imshow(S);
+sz = size(S);
+plot(cols,sz(1)-rows,’r.’);
+
+Exp-6
+IMAGE EDGE DETECTION USING SOBEL AND CANNEY FILTERING
+
+close ;
+clear ;
+clc ;
+img = imread('shapes.jpg');
+// Reads input image shapes.jpg
+img = rgb2gray(img);
+// Converts input image to gray scale
+clf
+// Clears figure handle
+subplot(2,2,1);
+imshow(img);
+title('Gray scale image');
+e=edge(img);//This performs edge detection operation with sobel, threshold =0.5
+subplot(2,2,2);
+imshow(e)
+title('sobel filter');
+
+e = edge(img, 'prewitt'); // threshold=0.5
+// Applied prewitt edge detection method
+subplot(2,2,3);;
+imshow(e)
+title('Prewitt image');
+e = edge(img,'canny', [0.06 0.2]);
+// Applies canny edge detection method
+
+subplot(2,2,4);
+imshow(e)
+title('canney filter');
+e = edge(img, 'fftderiv', 0.4) ;
+// Applies FFT gradient method ; 0.4 threshold
+figure;
+imshow(e)
+title('FFT image');
+
+exp-7 To perform the following operations in an image. (a) erosion, (b) dilation,
+
+// Read and Display the Image
+S = imread("C:\Users\Diksha Nasa\Desktop\Study Material\IT Workshop using scilab\coins.jpg");
+imshow(S);
+
+// Convert the Image to Grayscale
+Sgray = rgb2gray(S);
+imshow(Sgray);
+
+// Convert the Grayscale Image to Binary
+Sbin = im2bw(Sgray, 0.5);
+imshow(Sbin);
+
+// Display the Histogram of the Grayscale Image
+imhist(Sgray, [], 1);
+
+// Adjust the Threshold for Binary Conversion
+Sbin = im2bw(Sgray, 0.353);
+imshow(Sbin);
+
+// Automatically Determine the Threshold using Otsu's Method
+th = imgraythresh(Sgray);
+
+// Apply Binary Conversion with Otsu's Threshold
+Sbin = im2bw(Sgray, th);
+imshow(Sbin);
+
+// Define the Structuring Element
+se = strel('disk', 3);
+
+// Dilate the Binary Image
+Sd = imdilate(Sbin, se);
+imshow(Sd);
+
+// Erode the Binary Image
+Se = imerode(Sbin, se);
+
+// Display the Result of Erosion
+scf();
+imshow(Se);
+
+exp-8
+clc ;
+15 close ;
+16 clear ;
+17
+18
+
+14
+
+19 // c o n t i n u o u s s q u a r e wave S i g n a l :
+20
+21 a = input ( ’ E n t e r Ampli tude : ’ ) ;
+22 t =0:0.001:1;
+23 d = a * squarewave (2* %pi *10* t ) ;
+24
+25 subplot (2 ,2 ,1) ;
+26 plot (t ,d ) ;
+27 xlabel (”−−−−−−−−−−>Time I n d e x t ( s e c . ) ”) ;
+28 ylabel (”−−−−−−−−−−>Ampli tude ”) ;
+29 title (” S q ua r e Wave S i g n a l ”) ;
+30
+31 // d i s c r e t e s q u a r e wave s i g n a l
+32
+33 // a=i n p u t ( ’ E n t e r am pli t u d e ’ ) ;
+34 n =0 : 0.01 :1;
+35 d = a * squarewave (2* %pi *10* n ) ;
+36
+37 subplot (2 ,2 ,2) ;
+38 plot2d3 (n ,d ) ;
+39 xlabel (”−−−−−−−−−−>Time I n d e x n”) ;
+40 ylabel (”−−−−−−−−−−>Ampli tude ”) ;
+41 title (” S q ua r e Wave S i g n a l S e q u e n c e ”) ;
+42
+43 // Saw too th Wave S i g n a l
+44
+45 Fs = 20; // s am pl e s p e r s e c o n d
+46 t_total = 10; // s e c o n d s
+47 n_samples = Fs * t_total ;
+48 t = linspace (0 , t_total , n_samples ) ;
+49 f =500; // sound f r e q u e n c y
+50
+51 saw_wave =2*( f *t - floor (0.5+ f* t ) ) ;
+52
+53 subplot (2 ,2 ,3) ;
+54 plot (t , saw_wave ) ;
+55 xlabel (”−−−−−−−−−−>Time I n d e x t ( s e c . ) ”) ;
+56 ylabel (”−−−−−−−−−−−>Ampli tude ”) ;
+15
+
+57 title (” Saw too th Wave S i g n a l ”) ;
+58
+59 // sa w too t h wave s e q u e n c e
+60
+61 Fs = 20; // s am pl e s p e r s e c o n d
+62 t_total = 10; // s e c o n d s
+63 n_samples = Fs * t_total ;
+64 n = linspace (0 , t_total , n_samples ) ;
+65 f =500; // sound f r e q u e n c y
+66
+67 saw_wave =2*( f *n - floor (0.5+ f* n ) ) ;
+68
+69 subplot (2 ,2 ,4) ;
+70
+71 plot2d3 (n , saw_wave ) ;
+72 xlabel (”−−−−−−−−−−>Time I n d e x ”) ;
+73 ylabel (”−−−−−−−−−−−>Ampli tude ”) ;
+74 title (”Saw t o o t h Wave S i g n a l S e q u e n c e ”) ;
+75
+76
+77 // I n p u t Pa ram e t e r s
+78 // E n t e r Ampli tude : 7
+
+Scilab code Solution 2.3 Generation Of Triangular and Sinusoidal Signal
+and Sequences
+1 // E xpe rimen t Number : 2 . 3
+2 // W ri te a program to g e n e r a t e T r i a n g u l a r and
+S i n u s o i d a l S i g n a l s and S e q u e n c e s
+3 // B a si c S i m u l a t i o n L a b o r a t o r y
+4 //B. Tech I I Year I Sem
+5 // S t u d d e n t Name : E n rol em e n t Number :
+6 // Co u r s e I n s t r u c t o r : Dr . Ka n ti p u di MVV Prasad ,
+
+16
+
+Figure 2.3: Generation Of Triangular and Sinusoidal Signal and Sequences
+7 // S r e y a s I n s t i t u t e Of E n g i n e e r i n g & Technlogy ,
+Hyderabad .
+8 //
+−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−//
+9
+10
+11 // OS : Windows 1 0 . 1
+12 // S c i l a b 6 . 0 . 2
+13
+14
+15 clc ;
+16 close ;
+17 clear ;
+18
+19 // T r i a n g u l a r Wave S i g n a l
+20
+21 Fs = 20; // s am pl e s p e r s e c o n d
+22 t_total = 100; // s e c o n d s
+23 n_samples = Fs * t_total ;
+24 t = linspace (0 , t_total , n_samples ) ;
+25 f =40; // sound f r e q u e n c y
+26
+
+17
+
+27 tri_wave =(2/ %pi )* asin ( sin (2* %pi * f * t ) );
+28
+29 subplot (2 ,2 ,1) ;
+30
+31 plot (t , tri_wave ) ;
+32 xlabel ( ’−−−−−−−−−−>Time I n d e x t ( s e c . ) ’ ) ;
+33 ylabel ( ’−−−−−−−−−−−>Ampli tude ’ ) ;
+34 title ( ’ T r i a n g u l a r Wave S i g n a l ’ ) ;
+35
+36 // t r a i a n g u l a r wave s e q u e n c e
+37
+38 Fs = 20; // s am pl e s p e r s e c o n d
+39 t_total = 10; // s e c o n d s
+40 n_samples = Fs * t_total ;
+41 n = linspace (0 , t_total , n_samples ) ;
+42 f =40; // sound f r e q u e n c y
+43
+44 tri_wave =(2/ %pi )* asin ( sin (2* %pi * f * n ) );
+45
+46 subplot (2 ,2 ,2) ;
+47 plot2d3 (n , tri_wave ) ;
+48 xlabel ( ’−−−−−−−−−−>Time I n d e x t ( s e c . ) ’ ) ;
+49 ylabel ( ’−−−−−−−−−−−>Ampli tude ’ ) ;
+50 title ( ’ T r i a n g u l a r Wave S e q u e n c e ’ ) ;
+51
+52
+53 // c o n t i n u o u s S i n u s o i d a l S i g n a l
+54
+55 a = input ( ’ E n t e r am pli t u d e f o r S i n u s o i d a l S i g n a l : ’ ) ;
+56 t =0:0.001:1;
+57 p = a *sin (2* %pi *10* t ) ;
+58
+59 subplot (2 ,2 ,3) ;
+60 plot (t ,p ) ;
+61 title ( ’ S i n u s o i d a l S i g n a l ’ ) ;
+62 xlabel ( ’ tim e ’ ) ;
+63 ylabel ( ’ am pli t u d e ’ ) ;
+64
+
+18
+
+Figure 2.4: Generation Of Ramp and Sinc Signals and Sequences
+65 // d i s c r e t e s i n u o i d a l s i g n a l
+66
+67 // a=i n p u t ( ’ E n t e r magni tude ’ ) ;
+68 n = 0:100;
+69 x = a * sin (((2*0.05) * %pi ) * n ) ;
+70
+71 subplot (2 ,2 ,4) ;
+72 plot2d3 (n ,x ) ;
+73 title (” S i n u s o i d a l S e q u e n c e ”) ;
+74 xlabel (” s am pl e s ”) ;
+75 ylabel (” magni tude ”) ;
+76
+77 // Af t e r G e t ti n g T r a i n a g u l a r wave o u t p u t , v i s t t h e
+command window to e n t e r I n p u t Pa ram e t e r s
+78 // E n t e r am pli t u d e f o r S i n u s o i d a l S i g n a l : 5
+
+Scilab code Solution 2.4 Generation Of Ramp and Sinc Signals and Se-
+quences
+
+19
+
+1 // E xpe rimen t Number : 2 . 4
+2 // W ri te a program to g e n e r a t e ramp and s i n c S i g n a l s
+and S e q u e n c e s
+3 // B a si c S i m u l a t i o n L a b o r a t o r y
+4 //B. Tech I I Year I Sem
+5 // S t u d d e n t Name : E n rol em e n t Number :
+6 // Co u r s e I n s t r u c t o r : Dr . Ka n ti p u di MVV Prasad ,
+7 // S r e y a s I n s t i t u t e Of E n g i n e e r i n g & Technlogy ,
+Hyderabad .
+8 //
+−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−//
+9
+10 // OS : Windows 1 0 . 1
+11 // S c i l a b 6 . 0 . 2
+12
+13
+14 clc ;
+15 close
+16 clear ;
+17
+18 // c o n t i n u o u s ramp s i g n a l
+19
+20 t = 0 : 0.001 : 1;
+21 y = 0.5 * t ;
+22
+23 subplot (2 ,2 ,1) ;
+24 plot ( t , y ) ;
+25 xlabel ( ’−−−−−−−−−>Time I n d e x t ( s e c . ) ’ ) ;
+26 ylabel ( ’−−−−−−−−−>Ampli tude ’ ) ;
+27 title ( ’Ramp S i g n a l ’ ) ;
+28
+29 // d i s c r e t e ramp s i g n a l
+30
+31 n = 0 : 0.1 : 1;
+32 y = 0.5 * n ;
+33
+34 subplot (2 ,2 ,2) ;
+
+20
+
+35 plot2d3 (n ,y ) ;
+36 xlabel ( ’−−−−−−−−−−>Time I n d e x n ’ ) ;
+37 ylabel ( ’−−−−−−−−−−>Ampli tude ’ ) ;
+38 title ( ’Ramp S i g n a l S e q u e n c e ’ ) ;
+39
+40 // c o n t i n u o u s s i n c s i g n a l
+41
+42 t = linspace ( -10 , 10) ;
+43 y = sinc ( t ) ;
+44
+45 subplot (2 ,2 ,3) ;
+46 plot (t ,y ) ;
+47 xlabel (”Time I n d e x t ( s e c . ) ”) ;
+48 ylabel (” Ampli tude ”) ;
+49 title (” Si n c S i g n a l ”) ;
+50
+51 // d i s c r e t e s i n c s i g n a l
+52
+53 n = linspace ( -10 , 10) ;
+54 y = sinc ( n ) ;
+55
+56 subplot (2 ,2 ,4) ;
+57 plot2d3 (n ,y ) ;
+58 xlabel (”Time I n d e x n”) ;
+59 ylabel (” Ampli tude ”) ;
+60 title (” Si n c S i g n a l S e q u e n c e ”) ;
+
+
+exp-9 Image filtering in spatial and frequency domain
+
+--> xdel (winsid());
+Warning: Feature xdel(...) is obsolete and will be permanently removed in Scilab 6.2
+Warning: Please use close(...) instead.
+--> fc = input ("Enter Analog cutoff freq. in Hz=") //250
+Enter Analog cutoff freq. in Hz=250
+fc =
+250.
+--> fs = input (" Enter Analog sampling freq. in Hz=")
+Enter Analog sampling freq. in Hz=2000
+fs =
+2000.
+--> M = input ("Enter order of filter =")//4
+Enter order of filter =4
+M =
+4.
+--> w = (2* %pi)*(fc/fs);
+--> disp (w, ' Digital cutoff frequency in radians. cycles/samples');
+0.7853982
+" Digital cutoff frequency in radians. cycles/samples"
+
+--> wc = w/%pi;
+--> disp (wc, 'Normalized digital cutoff frequency in cycles /samples');
+0.25
+"Normalized digital cutoff frequency in cycles /samples"
+--> [wft,wfm,fr]=wfir('lp',M+1,[wc/2,0],'re' , [0,0]);
+--> disp(wft, 'Impulse Response of LPF FIR Filter:h[n} =');
+0.1591549 0.2250791 0.25 0.2250791 0.1591549
+"Impulse Response of LPF FIR Filter:h[n} ="
+--> //Plotting the Magnitude Response of LPF FIR Filter
+--> subplot (2,1,1)
+--> plot (2*fr, wfm)
+--> xlabel ('Normalized Digital Frequency W -------- >')
+--> ylabel (' Magnitude | H(w) |=')
+--> title ( 'Magnitude Response of FIR LPF')
+--> xgrid (1)
+--> subplot (2,1,2)
+--> plot (fr*fs,wfm)
+--> xlabel ('Analog Frequency in Hz f - >')
+--> ylabel ('Magnitude |H(w) |=')
+--> title ('Magnitude Response of FIR LPF')
+--> xgrid (1)
+
+exp-10 Apply Colour Image segmentation algorithm
+--> RGB = imread('tomatoes.jpg');
+--> imshow(RGB) = gcf();f.name='Color Image';
+Unexpected redefinition of Scilab function.
+--> Image = rgb2gray(RGB);
+--> imshow(Image);
+--> f=gcf();f.name='Gray Level Image';
+--> imshow(Image,jetcolormap(256))
+--> f=gcf();
+--> f.name='Pseudo Color Image';
+--> imshow(Image);
+--> imshow(Image)
+--> imshow(Image,jetcolormap(256))
+--> Histogram=imhist(Image);
+--> figure();plot(0:255, Histogram')
+--> xgrid(color('black'),1,8)
